@@ -25,14 +25,14 @@ int main(void)
 
 
     femGeo* theGeometry = geoGetGeometry();   
-    geoMeshRead("../data/mesh.txt");
+    geoMeshRead("../../data/mesh.txt");
     
-    femProblem* theProblem = femElasticityRead(theGeometry,"../data/problem.txt");
+    femProblem* theProblem = femElasticityRead(theGeometry,"../../data/problem.txt");
     double *theSoluce = theProblem->system->B;
     int n = theGeometry->theNodes->nNodes;
 
-    femFieldRead(&n,2,&theSoluce[0],"../data/U.txt");
-    femFieldRead(&n,2,&theSoluce[1],"../data/V.txt");
+    femFieldRead(&n,2,&theSoluce[0],"../../data/U.txt");
+    femFieldRead(&n,2,&theSoluce[1],"../../data/V.txt");
     femElasticityPrint(theProblem);
     
     

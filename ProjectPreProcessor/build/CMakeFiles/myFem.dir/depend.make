@@ -9,10 +9,12 @@ CMakeFiles/myFem.dir/src/glfem.c.o: ../src/fem.h
 CMakeFiles/myFem.dir/src/glfem.c.o: ../src/glfem.c
 CMakeFiles/myFem.dir/src/glfem.c.o: ../src/glfem.h
 
+CMakeFiles/myFem.dir/src/homework.c.o: ../gmsh/gmsh-4.11.1-Linux64-sdk/include/gmshc.h
 CMakeFiles/myFem.dir/src/homework.c.o: ../src/fem.h
 CMakeFiles/myFem.dir/src/homework.c.o: ../src/homework.c
 
 CMakeFiles/myFem.dir/src/main.c.o: ../glfw/include/GLFW/glfw3.h
+CMakeFiles/myFem.dir/src/main.c.o: ../gmsh/gmsh-4.11.1-Linux64-sdk/include/gmshc.h
 CMakeFiles/myFem.dir/src/main.c.o: ../src/fem.h
 CMakeFiles/myFem.dir/src/main.c.o: ../src/glfem.h
 CMakeFiles/myFem.dir/src/main.c.o: ../src/main.c

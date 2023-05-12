@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 project(myFemProject)
 
 set(EXEC_NAME myFem)
+set(CMAKE_BUILD_TYPE Debug)
 
 # link the aforementioned libraries
 add_executable(${EXEC_NAME} src/fem.c  src/homework.c src/main.c)

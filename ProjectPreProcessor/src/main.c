@@ -12,7 +12,7 @@
  
 #include "glfem.h"
 
-int main(void)
+int main(int argc, char* argv[])
 {  
 
 //
@@ -28,19 +28,19 @@ int main(void)
     theGeometry->LyPlate     =  Ly;     
     theGeometry->h           =  Lx * 0.05;    
     theGeometry->elementType = FEM_QUAD;
-  
-//    geoMeshGenerate();      // Utilisation de OpenCascade
+
+    geoMeshGenerate();      // Utilisation de OpenCascade
     
-//  geoMeshGenerateGeo();   // Utilisation de outils de GMSH  
-                            // Attention : les entités sont différentes !
-                            // On a aussi inversé la géomtrie pour rire !
+//    geoMeshGenerateGeo();   // Utilisation de outils de GMSH
+                            // Attention : les entitï¿½s sont diffï¿½rentes !
+                            // On a aussi inversï¿½ la gï¿½omtrie pour rire !
                             
-    geoMeshGenerateGeoFile("../data/mesh.geo");   // Lecture fichier geo
+//    geoMeshGenerateGeoFile("../data/mesh.geo");   // Lecture fichier geo
   
     geoMeshImport();
     geoSetDomainName(0,"Symetry");
     geoSetDomainName(7,"Bottom");
-    geoMeshWrite("../data/mesh.txt");
+    geoMeshWrite("../../data/mesh.txt");
           
 //
 //  -2- Definition du probleme
@@ -54,11 +54,11 @@ int main(void)
     femElasticityAddBoundaryCondition(theProblem,"Symetry",DIRICHLET_X,0.0);
     femElasticityAddBoundaryCondition(theProblem,"Bottom",DIRICHLET_Y,0.0);
     femElasticityPrint(theProblem);
-    femElasticityWrite(theProblem,"../data/problem.txt");
+    femElasticityWrite(theProblem,"../../data/problem.txt");
  
 
 //
-//  -3- Champ de la taille de référence du maillage
+//  -3- Champ de la taille de rï¿½fï¿½rence du maillage
 //
 
     double *meshSizeField = malloc(theGeometry->theNodes->nNodes*sizeof(double));
@@ -73,44 +73,48 @@ int main(void)
     
 //
 //  -4- Visualisation 
-//  
-    
-    int mode = 1; 
-    int domain = 0;
-    int freezingButton = FALSE;
-    double t, told = 0;
-    char theMessage[MAXNAME];
-   
- 
-    GLFWwindow* window = glfemInit("EPL1110 : Project 2022-23 ");
-    glfwMakeContextCurrent(window);
+//
 
-    do {
-        int w,h;
-        glfwGetFramebufferSize(window,&w,&h);
-        glfemReshapeWindows(theGeometry->theNodes,w,h);
 
-        t = glfwGetTime();  
-        if (glfwGetKey(window,'D') == GLFW_PRESS) { mode = 0;}
-        if (glfwGetKey(window,'V') == GLFW_PRESS) { mode = 1;}
-        if (glfwGetKey(window,'N') == GLFW_PRESS && freezingButton == FALSE) { domain++; freezingButton = TRUE; told = t;}
-        
-        if (t-told > 0.5) {freezingButton = FALSE; }
-        if (mode == 1) {
-            glfemPlotField(theGeometry->theElements,meshSizeField);
-            glfemPlotMesh(theGeometry->theElements); 
-            sprintf(theMessage, "Number of elements : %d ",theGeometry->theElements->nElem);
-            glColor3f(1.0,0.0,0.0); glfemMessage(theMessage); }
-        if (mode == 0) {
-            domain = domain % theGeometry->nDomains;
-            glfemPlotDomain( theGeometry->theDomains[domain]); 
-            sprintf(theMessage, "%s : %d ",theGeometry->theDomains[domain]->name,domain);
-             glColor3f(1.0,0.0,0.0); glfemMessage(theMessage);  }
-            
-         glfwSwapBuffers(window);
-         glfwPollEvents();
-    } while( glfwGetKey(window,GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-             glfwWindowShouldClose(window) != 1 );
+    if(strcmp(argv[1], "view") == 0){
+        int mode = 1;
+        int domain = 0;
+        int freezingButton = FALSE;
+        double t, told = 0;
+        char theMessage[MAXNAME];
+
+
+        GLFWwindow* window = glfemInit("EPL1110 : Project 2022-23 ");
+        glfwMakeContextCurrent(window);
+
+        do {
+            int w,h;
+            glfwGetFramebufferSize(window,&w,&h);
+            glfemReshapeWindows(theGeometry->theNodes,w,h);
+
+            t = glfwGetTime();
+            if (glfwGetKey(window,'D') == GLFW_PRESS) { mode = 0;}
+            if (glfwGetKey(window,'V') == GLFW_PRESS) { mode = 1;}
+            if (glfwGetKey(window,'N') == GLFW_PRESS && freezingButton == FALSE) { domain++; freezingButton = TRUE; told = t;}
+
+            if (t-told > 0.5) {freezingButton = FALSE; }
+            if (mode == 1) {
+                glfemPlotField(theGeometry->theElements,meshSizeField);
+                glfemPlotMesh(theGeometry->theElements);
+                sprintf(theMessage, "Number of elements : %d ",theGeometry->theElements->nElem);
+                glColor3f(1.0,0.0,0.0); glfemMessage(theMessage); }
+            if (mode == 0) {
+                domain = domain % theGeometry->nDomains;
+                glfemPlotDomain( theGeometry->theDomains[domain]);
+                sprintf(theMessage, "%s : %d ",theGeometry->theDomains[domain]->name,domain);
+                glColor3f(1.0,0.0,0.0); glfemMessage(theMessage);  }
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        } while( glfwGetKey(window,GLFW_KEY_ESCAPE) != GLFW_PRESS &&
+                 glfwWindowShouldClose(window) != 1 );
+    }
+
             
     // Check if the ESC key was pressed or the window was closed
 

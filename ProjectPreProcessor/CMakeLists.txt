@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 project(myFemProject)
 
 set(EXEC_NAME myFem)
+set(CMAKE_BUILD_TYPE Debug)
 
 # OpenGL
 find_package(OpenGL REQUIRED)
