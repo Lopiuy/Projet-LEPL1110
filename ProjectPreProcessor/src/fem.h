@@ -112,6 +112,7 @@ double              geoSize(double x, double y);
 double              geoSizeDefault(double x, double y);
 void                geoSetSizeCallback(double (*geoSize)(double x, double y));
 void                geoMeshGenerate();
+void                geoBasicElasticityProblem();
 void                geoMeshGenerateGeo();
 void                geoMeshGenerateGeoFile(const char *filename);
 void                geoMeshImport();

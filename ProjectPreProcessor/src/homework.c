@@ -52,6 +52,46 @@ void geoMeshGenerate() {
     return;
 }
 
+void geoBasicElasticityProblem() {
+
+    //
+    //              q_y force
+    //        +-----------------+ ^
+    //        |                 | |
+    //        |                 | | y = LyPlate
+    //        |                 | |
+    // ------ *-----------------* _ ------
+    //        |----------------->
+    //            x = LxPlate
+    //
+
+    femGeo *theGeometry = geoGetGeometry();
+
+    int ierr;
+    gmshClear(&ierr);
+
+    int L = 3;
+    int H = 1;
+
+    gmshModelOccAddPoint(0,0,0,4,1,&ierr);
+    gmshModelOccAddPoint(0,H,0,4,2,&ierr);
+    gmshModelOccAddPoint(L,H,0,4,3,&ierr);
+    gmshModelOccAddPoint(L,0,0,4,4,&ierr);
+    gmshModelOccAddLine(1,2,1,&ierr);
+    gmshModelOccAddLine(2,3,2,&ierr);
+    gmshModelOccAddLine(3,4,3,&ierr);
+    gmshModelOccAddLine(4,1,4,&ierr);
+    int curves[4] = {1,2,3,4};
+    gmshModelOccAddWire(curves, 4, 1, 1, &ierr);
+    int wiretags[1] = {1};
+    gmshModelOccAddPlaneSurface(wiretags, 1, 1, &ierr);
+
+    gmshModelOccSynchronize(&ierr);
+    gmshModelMeshGenerate(2, &ierr);
+
+    return;
+}
+
 
 void geoMeshGenerateGeo() {
 

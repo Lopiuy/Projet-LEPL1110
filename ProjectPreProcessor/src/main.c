@@ -26,8 +26,10 @@ int main(int argc, char* argv[])
     
     theGeometry->LxPlate     =  Lx;
     theGeometry->LyPlate     =  Ly;     
-    theGeometry->h           =  Lx * 0.05;    
-    theGeometry->elementType = FEM_QUAD;
+    theGeometry->h           =  Lx * 0.05;
+    theGeometry->elementType = FEM_TRIANGLE;
+
+    //geoBasicElasticityProblem();
 
     geoMeshGenerate();      // Utilisation de OpenCascade
     
@@ -38,6 +40,9 @@ int main(int argc, char* argv[])
 //    geoMeshGenerateGeoFile("../data/mesh.geo");   // Lecture fichier geo
   
     geoMeshImport();
+    geoMeshPrint();
+    //geoSetDomainName(1, "Top");
+    //geoSetDomainName(3, "Bottom");
     geoSetDomainName(0,"Symetry");
     geoSetDomainName(7,"Bottom");
     geoMeshWrite("../../data/mesh.txt");
@@ -45,18 +50,33 @@ int main(int argc, char* argv[])
 //
 //  -2- Definition du probleme
 //
-    
+
     double E   = 211.e9;
     double nu  = 0.3;
     double rho = 7.85e3; 
     double g   = 9.81;
-    femProblem* theProblem = femElasticityCreate(theGeometry,E,nu,rho,g,PLANAR_STRAIN);
+    femProblem* theProblem = femElasticityCreate(theGeometry,E,nu,rho,g,AXISYM);
     femElasticityAddBoundaryCondition(theProblem,"Symetry",DIRICHLET_X,0.0);
     femElasticityAddBoundaryCondition(theProblem,"Bottom",DIRICHLET_Y,0.0);
     femElasticityPrint(theProblem);
     femElasticityWrite(theProblem,"../../data/problem.txt");
- 
+/*
+//
+//  -2.1- Definition du probleme basic elasticity
+//
 
+    double E   = 211.e9;
+    double nu  = 0.3;
+    double rho = 7.85e3;
+    double g   = 9.81;
+    femProblem* theProblem = femElasticityCreate(theGeometry,E,nu,rho,g,PLANAR_STRESS);
+    double q = 100;
+    femElasticityAddBoundaryCondition(theProblem, "Bottom", DIRICHLET_Y, 0.0);
+    femElasticityAddBoundaryCondition(theProblem, "Top", NEUMANN_Y, -q);
+    theProblem->constrainedNodes[6] = 0;
+    femElasticityPrint(theProblem);
+    femElasticityWrite(theProblem, "../../data/problem.txt");
+*/
 //
 //  -3- Champ de la taille de r�f�rence du maillage
 //

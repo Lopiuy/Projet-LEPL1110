@@ -20,4 +20,18 @@ elif [ "$1" == "pre" ]; then
   make
   ./myFem view
   cd ../..
+
+elif [ "$1" == "proj" ]; then
+  cd Project/build/
+  make
+  ./myFem view
+  cd ../..
+
+
+elif [ "$1" == "post" ]; then
+  cd ProjectPostProcessor/build/
+  make
+  ./myFem view
+  cd ../..
+
 fi
