@@ -709,6 +709,11 @@ int femFieldRead(int* size, int shift, double* value, const char *filename) {
     return *size;
 }
 
+double* femFullSystemBandSolver(femFullSystem *mySystem)
+{
+
+}
+
 
 
 double femMin(double *x, int n) 
