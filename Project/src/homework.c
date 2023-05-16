@@ -37,8 +37,8 @@ double *femElasticitySolve(femProblem *theProblem)
     for (iElem = 0; iElem < theMesh->nElem; iElem++) {
         for (j=0; j < nLocal; j++) {
             map[j]  = theMesh->elem[iElem*nLocal+j];    // les indices des nlocalnodes(j) associé a iElem
-            mapX[j] = 2*map[j];                         // ??
-            mapY[j] = 2*map[j] + 1;                     // ??
+            mapX[j] = 2*map[j];
+            mapY[j] = 2*map[j] + 1;
             x[j]    = theNodes->X[map[j]];              // x du node
             y[j]    = theNodes->Y[map[j]];              // y du node
         }
@@ -119,10 +119,10 @@ double *femElasticitySolve(femProblem *theProblem)
     }
 
     // Neumann conditions
-    for (iCondition = 0; theProblem->nBoundaryConditions; iCondition++) {
-        femBoundaryCondition *theCondition = theProblem->conditions[iCondition];
-        femDomain *theDomain = theCondition->domain;
-        if( theCondition->type == NEUMANN_X || theCondition->type == NEUMANN_Y) {
+    for (iCondition = 0; iCondition < theProblem->nBoundaryConditions; iCondition++) {
+        femBoundaryCondition *theBoundary = theProblem->conditions[iCondition];
+        if( theBoundary->type == NEUMANN_X || theBoundary->type == NEUMANN_Y) {
+            femDomain *theDomain = theBoundary->domain;
             for(int iBoundaryElem = 0; iBoundaryElem < theDomain->nElem; iBoundaryElem++){
                 int BoundaryElemSegment = theDomain->elem[iBoundaryElem];
                 int BoundaryElemNode[2] = {theEdges->elem[2*BoundaryElemSegment], theEdges->elem[2*BoundaryElemSegment+1]};
@@ -135,12 +135,12 @@ double *femElasticitySolve(femProblem *theProblem)
                 double length = sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)); // length/2 = integral
 
                 if(theProblem->planarStrainStress != AXISYM){
-                    if(theCondition->type == NEUMANN_X){
-                        B[BoundaryElemNode[0]] += theCondition->value * length / 2;
-                        B[BoundaryElemNode[1]] += theCondition->value * length / 2;
-                    } else if(theCondition->type == NEUMANN_Y){
-                        B[BoundaryElemNode[0]+1] += theCondition->value * length / 2;
-                        B[BoundaryElemNode[1]+1] += theCondition->value * length / 2;
+                    if(theBoundary->type == NEUMANN_X){
+                        B[2*BoundaryElemNode[0]] += theBoundary->value * length / 2;
+                        B[2*BoundaryElemNode[1]] += theBoundary->value * length / 2;
+                    } else if(theBoundary->type == NEUMANN_Y){
+                        B[2*BoundaryElemNode[0]+1] += theBoundary->value * length / 2;
+                        B[2*BoundaryElemNode[1]+1] += theBoundary->value * length / 2;
                     } else {
                         Error("Wrong boundary condition type");
                     }
@@ -158,10 +158,10 @@ double *femElasticitySolve(femProblem *theProblem)
 
                             double integ = length/2*xLoc*weight[k]*phi[k][j];
 
-                            if(theCondition->type == NEUMANN_X){
-                                B[BoundaryElemNode[j]] += theCondition->value * integ;
-                            } else if(theCondition->type == NEUMANN_Y){
-                                B[BoundaryElemNode[j]+1] += theCondition->value * integ;
+                            if(theBoundary->type == NEUMANN_X){
+                                B[2*BoundaryElemNode[j]] += theBoundary->value * integ;
+                            } else if(theBoundary->type == NEUMANN_Y){
+                                B[2*BoundaryElemNode[j]+1] += theBoundary->value * integ;
                             } else {
                                 Error("Wrong boundary condition type");
                             }
@@ -181,6 +181,5 @@ double *femElasticitySolve(femProblem *theProblem)
         if (theConstrainedNodes[i] != -1) {
             double value = theProblem->conditions[theConstrainedNodes[i]]->value;
             femFullSystemConstrain(theSystem,i,value); }}
-                            
     return femFullSystemEliminate(theSystem);
 }

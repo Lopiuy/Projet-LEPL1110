@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 //    geoMeshGenerateGeoFile("../data/mesh.geo");   // Lecture fichier geo
   
     geoMeshImport();
-    geoMeshPrint();
+    //geoMeshPrint();
     //geoSetDomainName(1, "Top");
     //geoSetDomainName(3, "Bottom");
     geoSetDomainName(0,"Symetry");
@@ -60,23 +60,22 @@ int main(int argc, char* argv[])
     femElasticityAddBoundaryCondition(theProblem,"Bottom",DIRICHLET_Y,0.0);
     femElasticityPrint(theProblem);
     femElasticityWrite(theProblem,"../../data/problem.txt");
-/*
+
 //
 //  -2.1- Definition du probleme basic elasticity
 //
-
+/*
     double E   = 211.e9;
     double nu  = 0.3;
     double rho = 7.85e3;
-    double g   = 9.81;
+    double g   = 0;
     femProblem* theProblem = femElasticityCreate(theGeometry,E,nu,rho,g,PLANAR_STRESS);
+    theProblem->constrainedNodes[0] = 0;  //A enlever !
     double q = 100;
     femElasticityAddBoundaryCondition(theProblem, "Bottom", DIRICHLET_Y, 0.0);
     femElasticityAddBoundaryCondition(theProblem, "Top", NEUMANN_Y, -q);
-    theProblem->constrainedNodes[6] = 0;
     femElasticityPrint(theProblem);
-    femElasticityWrite(theProblem, "../../data/problem.txt");
-*/
+    femElasticityWrite(theProblem, "../../data/problem.txt");*/
 //
 //  -3- Champ de la taille de r�f�rence du maillage
 //

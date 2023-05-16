@@ -24,14 +24,20 @@ elif [ "$1" == "pre" ]; then
 elif [ "$1" == "proj" ]; then
   cd Project/build/
   make
-  ./myFem view
+  ./myFem
   cd ../..
 
 
 elif [ "$1" == "post" ]; then
   cd ProjectPostProcessor/build/
   make
-  ./myFem view
+  ./myFem
+  cd ../..
+
+elif [ "$1" == "projdb" ]; then
+  cd Project/build/
+  make
+  gdb ./myFem
   cd ../..
 
 fi

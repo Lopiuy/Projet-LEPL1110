@@ -662,17 +662,19 @@ void femElasticityAddBoundaryCondition(femProblem *theProblem, char *nameDomain,
     else 
         theProblem->conditions = realloc(theProblem->conditions, size*sizeof(femBoundaryCondition*));
     theProblem->conditions[size-1] = theBoundary;
-    
-    
-    int shift;
-    if (type == DIRICHLET_X)  shift = 0;      
-    if (type == DIRICHLET_Y)  shift = 1;  
-    int *elem = theBoundary->domain->elem;
-    int nElem = theBoundary->domain->nElem;
-    for (int e=0; e<nElem; e++) {
-        for (int i=0; i<2; i++) {
-            int node = theBoundary->domain->mesh->elem[2*elem[e]+i];
-            theProblem->constrainedNodes[2*node+shift] = size-1; }}    
+
+
+    if(type == DIRICHLET_X || type == DIRICHLET_Y) {
+        int shift;
+        if (type == DIRICHLET_X)  shift = 0;
+        if (type == DIRICHLET_Y)  shift = 1;
+        int *elem = theBoundary->domain->elem;
+        int nElem = theBoundary->domain->nElem;
+        for (int e=0; e<nElem; e++) {
+            for (int i=0; i<2; i++) {
+                int node = theBoundary->domain->mesh->elem[2*elem[e]+i];
+                theProblem->constrainedNodes[2*node+shift] = size-1; }}
+    }
 }
 
 void femElasticityPrint(femProblem *theProblem)  
@@ -695,7 +697,9 @@ void femElasticityPrint(femProblem *theProblem)
           double value = theCondition->value;
           printf("  %20s :",theCondition->domain->name);
           if (theCondition->type==DIRICHLET_X)  printf(" imposing %9.2e as the horizontal displacement  \n",value);
-          if (theCondition->type==DIRICHLET_Y)  printf(" imposing %9.2e as the vertical displacement  \n",value); }
+          if (theCondition->type==DIRICHLET_Y)  printf(" imposing %9.2e as the vertical displacement  \n",value);
+          if (theCondition->type==NEUMANN_X)    printf(" imposing %9.2e as the horizontal force  \n", value);
+          if (theCondition->type==NEUMANN_Y)    printf(" imposing %9.2e as the vertical force  \n", value); }
     printf(" ======================================================================================= \n\n");
 }
 

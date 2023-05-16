@@ -26,14 +26,37 @@ int main(void)
 
     femGeo* theGeometry = geoGetGeometry();   
     geoMeshRead("../../data/mesh.txt");
-    
     femProblem* theProblem = femElasticityRead(theGeometry,"../../data/problem.txt");
+    //theProblem->constrainedNodes[0] = 0;
     double *theSoluce = theProblem->system->B;
     int n = theGeometry->theNodes->nNodes;
 
     femFieldRead(&n,2,&theSoluce[0],"../../data/U.txt");
     femFieldRead(&n,2,&theSoluce[1],"../../data/V.txt");
     femElasticityPrint(theProblem);
+
+// Comparer à la solution analytique
+/*    double E   = theProblem->E;
+    double nu  = theProblem->nu;
+    double rho = theProblem->rho;
+    double g   = theProblem->g;
+    double q = 100;
+
+
+    double *X = theProblem->geometry->theNodes->X;
+    double *Y = theProblem->geometry->theNodes->Y;
+
+    printf(" ==== Soluce : \n");
+    for (int i=0; i<theProblem->geometry->theNodes->nNodes*2; i++) {
+        if (i % 2 == 0) printf("U%d = %14.7e", i/2, -theSoluce[i]);
+        else printf("V%d = %14.7e", i/2, theSoluce[i]);
+
+        if (theProblem->constrainedNodes[i] == -1) {
+            if (i%2==0) printf("\t expected : %14.7e\n", q*nu*(X[i/2])/E);
+            else        printf("\t expected : %14.7e\n", -q*Y[i/2]/E);
+        }
+        else printf("\t exepcted :  0.0\n");
+    }*/
     
     
 //
