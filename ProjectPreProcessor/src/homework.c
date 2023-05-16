@@ -52,6 +52,128 @@ void geoMeshGenerate() {
     return;
 }
 
+void designHouse(double w, double h, double r_w, double r_h, double w_w, double d_w, double d_h, double meshSizeFactor){
+    /**
+    * w = width of our house
+    * h = height of our house
+    * r_w = width of our roof
+    * r_h = height of our roof
+    * w_w = width of our window
+    * d_w = width of our door
+    * d_h = height of our door
+    * meshSizeFactor = meshSize / width of prongs
+    * if `filename` is not NULL, save to file
+    */
+
+    femGeo* theGeometry = geoGetGeometry();
+    geoSetSizeCallback(geoSize);
+
+    int ierr;
+    gmshClear(&ierr);
+
+    // double meshSize = h * meshSizeFactor;
+
+    // Add points
+
+    double window_x = 0 + 1.0/5.0 * w;
+    double window_y = 0 - 1.0/5.0 * h - w_w;
+
+    double x = 0;
+    double y = 0;
+    double z = 0;
+
+    gmshModelOccAddPoint(x,y,z,0,1,&ierr);
+    y -= h;
+    gmshModelOccAddPoint(x,y,z,0,2,&ierr);
+    x += 3.0/5.0 * w;
+    gmshModelOccAddPoint(x,y,z,0,3,&ierr);
+    y += d_h;
+    gmshModelOccAddPoint(x,y,z,0,4,&ierr);
+    x += d_w;
+    gmshModelOccAddPoint(x,y,z,0,5,&ierr);
+    y -= d_h;
+    gmshModelOccAddPoint(x,y,z,0,6,&ierr);
+    x += 2.0/5.0 * w - d_w;
+    gmshModelOccAddPoint(x,y,z,0,7,&ierr);
+    y += h;
+    gmshModelOccAddPoint(x,y,z,0,8,&ierr);
+    x += r_w;
+    gmshModelOccAddPoint(x,y,z,0,9,&ierr);
+    y += h/20.0;
+    gmshModelOccAddPoint(x,y,z,0,10,&ierr);
+    x += -r_w - w/2.0 + w/20.0;
+    y += r_h;
+    gmshModelOccAddPoint(x,y,z,0,11,&ierr);
+    x -= w/10.0;
+    gmshModelOccAddPoint(x,y,z,0,12,&ierr);
+    y -= r_h;
+    x += -w/2.0 - r_w + w/20.0;
+    gmshModelOccAddPoint(x,y,z,0,13,&ierr);
+    y -= h/20.0;
+    gmshModelOccAddPoint(x,y,z,0,14,&ierr);
+
+
+    // Add curves
+    gmshModelOccAddLine(1,2,1,&ierr);
+    gmshModelOccAddLine(2,3,2,&ierr);
+    gmshModelOccAddLine(3,4,3,&ierr);
+    gmshModelOccAddLine(4,5,4,&ierr);
+    gmshModelOccAddLine(5,6,5,&ierr);
+    gmshModelOccAddLine(6,7,6,&ierr);
+    gmshModelOccAddLine(7,8,7,&ierr);
+    gmshModelOccAddLine(8,9,8,&ierr);
+    gmshModelOccAddLine(9,10,9,&ierr);
+    gmshModelOccAddLine(10,11,10,&ierr);
+    gmshModelOccAddLine(11,12,11,&ierr);
+    gmshModelOccAddLine(12,13,12,&ierr);
+    gmshModelOccAddLine(13,14,13,&ierr);
+    gmshModelOccAddLine(14,1,14,&ierr);
+
+
+    // Add wire (closed curve)
+    int curveTags[14] = {1,2,3,4,5,6,7,8,9,10,11, 12, 13, 14};
+    gmshModelOccAddWire(curveTags, 14, 1, 1, &ierr);
+
+    // Add surface
+    int wireTags[1] = {1};
+    gmshModelOccAddPlaneSurface(wireTags, 1, 100, &ierr);
+
+    int tagWindow = gmshModelOccAddRectangle(window_x,window_y,0,w_w,w_w,-1,0.0,&ierr);
+
+    int houseId[] = {2, 100};
+    int windowId[] = {2, tagWindow};
+
+    gmshModelOccCut(houseId,2,windowId,2,NULL,NULL,NULL,NULL,NULL,-1,1,1,&ierr);
+
+    // Sync
+    gmshModelOccSynchronize(&ierr);
+
+    // // Create physical group for surface
+    int surfaceTags[1] = {100};
+    gmshModelAddPhysicalGroup(2, surfaceTags, 1, -1, "bulk", &ierr);
+
+    // // Create physical group for clamped curves
+    // int clampedCurveTags[3] = {3,5,7};
+    // gmshModelAddPhysicalGroup(1, clampedCurveTags, 3, -1, "clamped", &ierr);
+
+    if (theGeometry->elementType == FEM_QUAD) {
+        gmshOptionSetNumber("Mesh.MeshSizeFactor", 0.3, &ierr);
+        gmshOptionSetNumber("Mesh.SaveAll",1,&ierr);
+        gmshOptionSetNumber("Mesh.RecombineAll",1,&ierr);
+        gmshOptionSetNumber("Mesh.Algorithm",8,&ierr);
+        gmshOptionSetNumber("Mesh.RecombinationAlgorithm",1.0,&ierr);
+        gmshModelGeoMeshSetRecombine(2,1,45,&ierr);
+        gmshModelMeshGenerate(2,&ierr);  }
+
+    if (theGeometry->elementType == FEM_TRIANGLE) {
+        gmshOptionSetNumber("Mesh.MeshSizeFactor", 0.5, &ierr);
+        gmshOptionSetNumber("Mesh.SaveAll",1,&ierr);
+        gmshModelMeshGenerate(2,&ierr);  }
+
+
+    //if(filename != NULL) gmshWrite(filename, &ierr);
+}
+
 void geoBasicElasticityProblem() {
 
     //

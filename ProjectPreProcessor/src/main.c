@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 //
 
     double Lx = 1.0;
-    double Ly = 1.0;     
+    double Ly = 1.0;
     geoInitialize();
     femGeo* theGeometry = geoGetGeometry();
     
@@ -31,7 +31,9 @@ int main(int argc, char* argv[])
 
     //geoBasicElasticityProblem();
 
-    geoMeshGenerate();      // Utilisation de OpenCascade
+    designHouse(20.0, 20.0, 4.0, 6.0, 4.0, 5.0, 7.2, 0.4);
+
+    //geoMeshGenerate();      // Utilisation de OpenCascade
     
 //    geoMeshGenerateGeo();   // Utilisation de outils de GMSH
                             // Attention : les entit�s sont diff�rentes !
@@ -39,27 +41,27 @@ int main(int argc, char* argv[])
                             
 //    geoMeshGenerateGeoFile("../data/mesh.geo");   // Lecture fichier geo
   
-    geoMeshImport();
+    /*geoMeshImport();
     //geoMeshPrint();
     //geoSetDomainName(1, "Top");
     //geoSetDomainName(3, "Bottom");
     geoSetDomainName(0,"Symetry");
     geoSetDomainName(7,"Bottom");
-    geoMeshWrite("../../data/mesh.txt");
+    geoMeshWrite("../../data/mesh.txt");*/
           
 //
 //  -2- Definition du probleme
 //
-
+/*
     double E   = 211.e9;
     double nu  = 0.3;
     double rho = 7.85e3; 
     double g   = 9.81;
-    femProblem* theProblem = femElasticityCreate(theGeometry,E,nu,rho,g,AXISYM);
+    femProblem* theProblem = femElasticityCreate(theGeometry,E,nu,rho,g,PlANAR_STRAIN);
     femElasticityAddBoundaryCondition(theProblem,"Symetry",DIRICHLET_X,0.0);
     femElasticityAddBoundaryCondition(theProblem,"Bottom",DIRICHLET_Y,0.0);
     femElasticityPrint(theProblem);
-    femElasticityWrite(theProblem,"../../data/problem.txt");
+    femElasticityWrite(theProblem,"../../data/problem.txt");*/
 
 //
 //  -2.1- Definition du probleme basic elasticity
@@ -76,6 +78,33 @@ int main(int argc, char* argv[])
     femElasticityAddBoundaryCondition(theProblem, "Top", NEUMANN_Y, -q);
     femElasticityPrint(theProblem);
     femElasticityWrite(theProblem, "../../data/problem.txt");*/
+
+// -2.2- Definition du probleme maison
+
+    geoMeshImport();
+    //geoMeshPrint();
+    geoSetDomainName(2,"BottomL");
+    //geoSetDomainName(4,"LeftDoor");
+    //geoSetDomainName(6,"BottomDoor");
+    //geoSetDomainName(8,"RightDoor");
+    geoSetDomainName(10,"BottomR");
+    geoMeshWrite("../../data/mesh.txt");
+    double E   = 14e11;
+    double nu  = 0.22;
+    double rho = 1.8e3;
+    double g   = 9.81;
+    femProblem* theProblem = femElasticityCreate(theGeometry,E,nu,rho,g,PLANAR_STRAIN);
+    femElasticityAddBoundaryCondition(theProblem,"BottomL",DIRICHLET_Y,0.0);
+    femElasticityAddBoundaryCondition(theProblem,"BottomR",DIRICHLET_Y,0.0);
+    femElasticityAddBoundaryCondition(theProblem,"BottomL",DIRICHLET_X,0.0);
+    femElasticityAddBoundaryCondition(theProblem,"BottomR",DIRICHLET_X,0.0);
+    //femElasticityAddBoundaryCondition(theProblem,"BottomDoor",DIRICHLET_Y,0.0);
+    //femElasticityAddBoundaryCondition(theProblem,"RightDoor",DIRICHLET_X,0.0);
+    //femElasticityAddBoundaryCondition(theProblem,"LeftDoor",DIRICHLET_X,0.0);
+    femElasticityPrint(theProblem);
+    femElasticityWrite(theProblem,"../../data/problem.txt");
+
+
 //
 //  -3- Champ de la taille de r�f�rence du maillage
 //

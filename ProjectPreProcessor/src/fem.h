@@ -115,6 +115,7 @@ void                geoMeshGenerate();
 void                geoBasicElasticityProblem();
 void                geoMeshGenerateGeo();
 void                geoMeshGenerateGeoFile(const char *filename);
+void                designHouse(double w, double h, double r_w, double r_h, double w_w, double d_w, double d_h, double meshSizeFactor);
 void                geoMeshImport();
 void                geoMeshPrint();
 void                geoMeshWrite(const char *filename);

@@ -1,7 +1,9 @@
-Type of problem    :  Axi-symetric problem 
-Young modulus      :  2.1100000e+11  
-Poisson ratio      :  3.0000000e-01  
-Mass density       :  7.8500000e+03  
+Type of problem    :  Planar strains 
+Young modulus      :  1.4000000e+12  
+Poisson ratio      :  2.2000000e-01  
+Mass density       :  1.8000000e+03  
 Gravity            :  9.8100000e+00  
-Boundary condition :  Dirichlet-X        =  0.0000000e+00 : Symetry
-Boundary condition :  Dirichlet-Y        =  0.0000000e+00 : Bottom
+Boundary condition :  Dirichlet-Y        =  0.0000000e+00 : BottomL
+Boundary condition :  Dirichlet-Y        =  0.0000000e+00 : BottomR
+Boundary condition :  Dirichlet-X        =  0.0000000e+00 : BottomL
+Boundary condition :  Dirichlet-X        =  0.0000000e+00 : BottomR
