@@ -1,0 +1,11 @@
+Type of problem    :  Planar stresses  
+Young modulus      :  2.1100000e+11  
+Poisson ratio      :  3.0000000e-01  
+Mass density       :  7.8500000e+03  
+Gravity            :  9.8100000e+00  
+Boundary condition :  Dirichlet-Y        =  0.0000000e+00 : Patin
+Boundary condition :  Neumann-Y          = -2.6100000e+03 : Assise
+Boundary condition :  Neumann-X          = -7.0000000e-02 : Attache
+Boundary condition :  Dirichlet-X        =  0.0000000e+00 : Rocher
+Solver type        :  Band matrix solver 
+Renumbering        :  x-num renumbering 

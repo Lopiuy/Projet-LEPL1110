@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ylaus/Documents/EPL/Q6/Elem Fini/group094-ylausberg-antoilemaire-rapport/src/fem.c
+fem.h
+/home/ylaus/Documents/EPL/Q6/Elem Fini/group094-ylausberg-antoilemaire-rapport/src/fem.h
+
+/home/ylaus/Documents/EPL/Q6/Elem Fini/group094-ylausberg-antoilemaire-rapport/src/fem.h
+stdio.h
+-
+stdlib.h
+-
+math.h
+-
+string.h
+-
+
+/home/ylaus/Documents/EPL/Q6/Elem Fini/group094-ylausberg-antoilemaire-rapport/src/homework.c
+fem.h
+/home/ylaus/Documents/EPL/Q6/Elem Fini/group094-ylausberg-antoilemaire-rapport/src/fem.h
+
+/home/ylaus/Documents/EPL/Q6/Elem Fini/group094-ylausberg-antoilemaire-rapport/src/main.c
+fem.h
+/home/ylaus/Documents/EPL/Q6/Elem Fini/group094-ylausberg-antoilemaire-rapport/src/fem.h
+time.h
+-
+
