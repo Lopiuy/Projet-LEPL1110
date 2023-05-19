@@ -1,1 +1,0 @@
-/usr/bin/cc -g   CMakeFiles/myFem.dir/src/fem.c.o CMakeFiles/myFem.dir/src/homework.c.o CMakeFiles/myFem.dir/src/main.c.o  -o myFem  -lm 
